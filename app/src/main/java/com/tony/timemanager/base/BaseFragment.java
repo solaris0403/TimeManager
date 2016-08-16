@@ -1,9 +1,9 @@
 package com.tony.timemanager.base;
 
-import android.support.v4.app.Fragment;
+import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * Created by tony on 8/15/16.
  */
-public class BaseFragment extends Fragment{
+public class BaseFragment extends SupportFragment {
 }

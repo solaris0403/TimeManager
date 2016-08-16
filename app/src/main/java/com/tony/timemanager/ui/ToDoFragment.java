@@ -1,6 +1,5 @@
 package com.tony.timemanager.ui;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,16 +7,20 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.tony.timemanager.R;
 import com.tony.timemanager.base.BaseFragment;
 import com.tony.timemanager.db.Notes;
+import com.tony.timemanager.ui.adapter.ToDoAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,10 +30,16 @@ import butterknife.ButterKnife;
  */
 public class ToDoFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
     private static final Uri uri = Notes.CONTENT_NOTE_URI;
-    @BindView(R.id.btn_add)
-    Button mBtnAdd;
     @BindView(R.id.rv_todo)
     RecyclerView mRvTodo;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    private ToDoAdapter mAdapter;
+    private List<String> mList = new ArrayList<>();
+
+    public static ToDoFragment newInstance() {
+        return new ToDoFragment();
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,7 +52,14 @@ public class ToDoFragment extends BaseFragment implements LoaderManager.LoaderCa
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_todo, container, false);
         ButterKnife.bind(this, rootView);
-        mBtnAdd.setOnClickListener(this);
+        mAdapter = new ToDoAdapter(getActivity(), mList);
+        mAdapter.setOnItemClickListener(onItemClickListener);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRvTodo.setLayoutManager(linearLayoutManager);
+        mRvTodo.setHasFixedSize(true);
+        mRvTodo.setAdapter(mAdapter);
+
         return rootView;
     }
 
@@ -54,10 +70,11 @@ public class ToDoFragment extends BaseFragment implements LoaderManager.LoaderCa
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        Log.i("main", "-------------->onLoadFinished");
+        mList.clear();
         while (cursor.moveToNext()) {
-            Log.i("main", "-------------->" + cursor.getString(cursor.getColumnIndex(Notes.CONTENT)));
+            mList.add(cursor.getString(cursor.getColumnIndex(Notes.CONTENT)));
         }
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -65,10 +82,23 @@ public class ToDoFragment extends BaseFragment implements LoaderManager.LoaderCa
 
     }
 
+    private ToDoAdapter.OnItemClickListener onItemClickListener = new ToDoAdapter.OnItemClickListener() {
+        @Override
+        public void onItemClick(View view, int position, Object data) {
+            if (getPreFragment() instanceof MainFragment) {
+                getPreFragment().start(ToDoDetailFragment.newInstance());
+            }
+        }
+    };
+
     @Override
     public void onClick(View view) {
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(Notes.CONTENT, "ssssssssssss");
-            getActivity().getContentResolver().insert(uri, contentValues);
+        switch (view.getId()) {
+//            case R.id.btn_add:
+//                ContentValues contentValues = new ContentValues();
+//                contentValues.put(Notes.CONTENT, "ssssssssssss");
+//                getActivity().getContentResolver().insert(uri, contentValues);
+//                break;
+        }
     }
 }
