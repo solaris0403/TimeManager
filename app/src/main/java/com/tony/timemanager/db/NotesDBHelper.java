@@ -32,8 +32,16 @@ public class NotesDBHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_NOTE_TABLE_SQL =
             "CREATE TABLE " + TABLE.NOTE + "(" +
-                    Notes.ID + " INTEGER PRIMARY KEY," +
-                    Notes.CONTENT + "  TEXT NOT NULL DEFAULT ''" +
+                    Note.ID + " INTEGER PRIMARY KEY, " +
+                    Note.NOTE_ID + " TEXT NOT NULL DEFAULT '', " +
+                    Note.TITLE + " TEXT NOT NULL DEFAULT '', " +
+                    Note.SNIPPET + " TEXT NOT NULL DEFAULT '', " +
+                    Note.CONTENT + " TEXT NOT NULL DEFAULT '', " +
+                    Note.CREATED_DATE + " INTEGER NOT NULL DEFAULT (strftime('%s','now') * 1000), " +
+                    Note.MODIFIED_DATE + " INTEGER NOT NULL DEFAULT (strftime('%s','now') * 1000), " +
+                    Note.ALERTED_DATE + " INTEGER NOT NULL DEFAULT 0," +
+                    Note.TYPE + " INTEGER NOT NULL DEFAULT 0, " +
+                    Note.VERSION + " INTEGER NOT NULL DEFAULT 0" +
                     ")";
 
     private void createNoteTable(SQLiteDatabase sqLiteDatabase) {

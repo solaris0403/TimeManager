@@ -34,12 +34,12 @@ public class NotesContentProvider extends ContentProvider {
 
     @Nullable
     @Override
-    public Cursor query(Uri uri, String[] strings, String s, String[] strings1, String s1) {
+    public Cursor query(Uri uri, String[] columns, String selection, String[] selectionArgs, String orderBy) {
         Cursor cursor = null;
         SQLiteDatabase db = mDBHelper.getReadableDatabase();
         switch (mMatcher.match(uri)) {
             case URI_NOTE:
-                cursor = db.query(TABLE.NOTE, strings, s, strings1, null, null, s1);
+                cursor = db.query(TABLE.NOTE, columns, selection, selectionArgs, null, null, orderBy);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
@@ -75,12 +75,12 @@ public class NotesContentProvider extends ContentProvider {
     }
 
     @Override
-    public int delete(Uri uri, String s, String[] strings) {
+    public int delete(Uri uri, String whereClause, String[] whereArgs) {
         SQLiteDatabase db = mDBHelper.getWritableDatabase();
         int count = 0;
         switch (mMatcher.match(uri)){
             case URI_NOTE:
-                count = db.delete(TABLE.NOTE, s, strings);
+                count = db.delete(TABLE.NOTE, whereClause, whereArgs);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
@@ -92,12 +92,12 @@ public class NotesContentProvider extends ContentProvider {
     }
 
     @Override
-    public int update(Uri uri, ContentValues contentValues, String s, String[] strings) {
+    public int update(Uri uri, ContentValues contentValues, String whereClause, String[] whereArgs) {
         int count = 0;
         SQLiteDatabase db = mDBHelper.getWritableDatabase();
         switch (mMatcher.match(uri)){
             case URI_NOTE:
-                count = db.update(TABLE.NOTE, contentValues, s, strings);
+                count = db.update(TABLE.NOTE, contentValues, whereClause, whereArgs);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);

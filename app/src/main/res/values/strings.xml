@@ -2,7 +2,8 @@
     <string name="app_name">小M</string>
 
     <string name="todo_add">添加</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="dialog_title">提示</string>
+    <string name="dialog_content_delete">是否删除？</string>
+    <string name="dialog_positive">是</string>
+    <string name="dialog_negative">否</string>
 </resources>
